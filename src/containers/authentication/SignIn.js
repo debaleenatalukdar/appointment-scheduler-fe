@@ -19,10 +19,7 @@ export function SignIn() {
     const handleSubmit = async (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        // console.log({
-        //     email: data.get("email"),
-        //     password: data.get("password"),
-        // });
+        
         try {
             let response = await fetch('http://localhost:5209/auth/login', {
                 method: 'POST',
@@ -34,8 +31,8 @@ export function SignIn() {
                     'Content-Type': 'application/json'
                 }
             });
-
-            console.log(response);
+            let response_data = await response.json();
+            console.log(response_data);
         }
         catch(exception) {
             console.log(exception);

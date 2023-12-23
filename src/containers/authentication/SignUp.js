@@ -10,17 +10,44 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { useNavigate } from "react-router-dom";
 
 const defaultTheme = createTheme();
 
 export function SignUp() {
-    const handleSubmit = (event) => {
+    const navigate = useNavigate();
+
+    const handleSubmit = async (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        console.log({
-            email: data.get("email"),
-            password: data.get("password"),
-        });
+
+        try {
+            const response = await fetch('http://localhost:5209/auth/signup', {
+                method: 'POST',
+                body: JSON.stringify({
+                    'firstName': data.get('firstName'),
+                    'lastName': data.get('lastName'),
+                    'email': data.get('email'),
+                    'phoneNumber': data.get('phoneNumber'),
+                    'password': data.get('password')
+                }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            const response_data = await response.json();
+
+            if(response_data.success) {
+                navigate('/');
+            }
+            else {
+                throw response_data.message;
+            }
+        }
+        catch(exception) {
+            console.log(exception);
+        }
     };
 
     return (
@@ -83,9 +110,9 @@ export function SignUp() {
                                 <TextField
                                     required
                                     fullWidth
-                                    id="phonenumber"
+                                    id="phoneNumber"
                                     label="Phone Number"
-                                    name="phonenumber"
+                                    name="phoneNumber"
                                     autoComplete="tel-national"
                                 />
                             </Grid>
