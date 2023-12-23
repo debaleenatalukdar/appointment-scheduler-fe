@@ -3,11 +3,13 @@ import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 
-import { SignIn } from "./containers/authentication";
+import { RouterProvider } from "react-router-dom";
+
+import { router } from "./routes/routes";
 
 function App() {
     return(
-        <SignIn />
+        <RouterProvider router={router} />
     );
 }
 
