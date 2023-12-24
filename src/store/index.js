@@ -1,1 +1,1 @@
-export { AuthenticationContext } from './AuthenticationContext';
+export { store } from './store';
