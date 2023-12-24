@@ -12,10 +12,23 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const defaultTheme = createTheme();
 
 export function SignIn() {
+    const userAuth = useSelector(state => state.auth);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    // If user is already logged in, navigate to homepage
+    React.useEffect(() => {
+        if(userAuth.userLoggedIn === true) {
+            navigate('/');
+        }
+    })
+
     const handleSubmit = async (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
@@ -32,7 +45,13 @@ export function SignIn() {
                 }
             });
             let response_data = await response.json();
-            console.log(response_data);
+            
+            if(response_data.success === true) {
+                dispatch({
+                    type: 'login',
+                    body: response_data.data
+                });
+            }
         }
         catch(exception) {
             console.log(exception);

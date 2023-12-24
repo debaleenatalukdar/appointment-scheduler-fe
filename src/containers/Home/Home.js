@@ -16,6 +16,8 @@ import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import { mainListItems, secondaryListItems } from "./listItems";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router";
 
 const drawerWidth = 240;
 
@@ -70,6 +72,16 @@ export function Home() {
     const toggleDrawer = () => {
         setOpen(!open);
     };
+
+    const navigate = useNavigate();
+    const userAuth = useSelector(state => state.auth);
+
+    React.useEffect(() => {
+        // If user is not authenticated, navigate to the Sign In page
+        if(!userAuth.userLoggedIn) {
+            navigate('/signin');
+        }
+    });
 
     return (
         <ThemeProvider theme={defaultTheme}>
