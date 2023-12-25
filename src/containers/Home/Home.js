@@ -15,9 +15,10 @@ import Grid from "@mui/material/Grid";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import { mainListItems, secondaryListItems } from "./listItems";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
+import { MainListItems } from "./MainListItems";
+import { SecondaryListItems } from "./SecodaryListItems";
 
 const drawerWidth = 240;
 
@@ -75,6 +76,7 @@ export function Home() {
 
     const navigate = useNavigate();
     const userAuth = useSelector(state => state.auth);
+    const selectedView = useSelector(state => state.view);
 
     React.useEffect(() => {
         // If user is not authenticated, navigate to the Sign In page
@@ -112,7 +114,7 @@ export function Home() {
                             noWrap
                             sx={{ flexGrow: 1 }}
                         >
-                            Home
+                            { selectedView }
                         </Typography>
                         <IconButton color="inherit">
                             <Badge badgeContent={0} color="secondary">
@@ -136,9 +138,9 @@ export function Home() {
                     </Toolbar>
                     <Divider />
                     <List component="nav">
-                        {mainListItems}
+                        <MainListItems selectedView={ selectedView } />
                         <Divider sx={{ my: 1 }} />
-                        {secondaryListItems}
+                        <SecondaryListItems selectedView={ selectedView } />
                     </List>
                 </Drawer>
                 <Box
