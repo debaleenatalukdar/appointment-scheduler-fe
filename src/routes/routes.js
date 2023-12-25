@@ -4,6 +4,6 @@ import { Home } from "../containers/Home";
 
 export const router = createBrowserRouter([
     { path: '/', element: <Home /> },
-    { path: '/signup', element: <SignUp /> },
-    { path: '/signin', element: <SignIn /> }
+    { path: '/signin', element: <SignIn /> },
+    { path: '/signup', element: <SignUp /> }
 ]);
