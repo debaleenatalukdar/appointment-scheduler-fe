@@ -19,6 +19,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { MainListItems } from "./MainListItems";
 import { SecondaryListItems } from "./SecodaryListItems";
+import { Users } from "../Users";
 
 const drawerWidth = 240;
 
@@ -157,8 +158,8 @@ export function Home() {
                 >
                     <Toolbar />
                     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-                        <Grid container spacing={3}>
-                            
+                        <Grid container>
+                            { selectedView === 'Users' && <Users /> }
                         </Grid>
                     </Container>
                 </Box>
