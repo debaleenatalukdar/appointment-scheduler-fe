@@ -20,6 +20,7 @@ import { useNavigate } from "react-router";
 import { MainListItems } from "./MainListItems";
 import { SecondaryListItems } from "./SecodaryListItems";
 import { Users } from "../Users";
+import { Years } from "../Years";
 
 const drawerWidth = 240;
 
@@ -159,6 +160,7 @@ export function Home() {
                     <Toolbar />
                     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
                         <Grid container>
+                            { selectedView === 'Year' && <Years /> }
                             { selectedView === 'Users' && <Users /> }
                         </Grid>
                     </Container>
