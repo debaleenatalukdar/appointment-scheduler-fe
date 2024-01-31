@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Autocomplete, Box, Button, Chip, Paper, TextField } from "@mui/material";
+import { Alert, Autocomplete, Box, Button, Chip, Collapse, Paper, TextField } from "@mui/material";
 import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
@@ -23,6 +23,7 @@ export function CreateMeeting() {
     const [ attendeeList, setAttendeeList ] = useState([ userAuth.userData ]);
     const [ meetingStartTime, setMeetingStartTime ] = useState(dayjs());
     const [ meetingEndTime, setMeetingEndTime ] = useState(dayjs().add(1, "hour"));
+    const [ meetingCreated, setMeetingCreated ] = useState(false);
 
     useEffect(() => {
         fetchUserData().then(userData => {
@@ -55,7 +56,7 @@ export function CreateMeeting() {
             const response_data = await response.json();
 
             if(response_data.success) {
-                console.log('Successful');
+                setMeetingCreated(true);
             }
             else {
                 throw response_data.message;
@@ -150,6 +151,18 @@ export function CreateMeeting() {
                     </Button>
                 </Box>
             </LocalizationProvider>
+
+            { 
+                meetingCreated && 
+                <Collapse in={ meetingCreated }>
+                    <Alert
+                        severity="success"
+                        onClose={() => setMeetingCreated(false)}
+                    >
+                        New meeting created successfully!
+                    </Alert>
+                </Collapse> 
+            }
         </Paper>
     );
 }
