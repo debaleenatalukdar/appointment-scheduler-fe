@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Autocomplete, Box, Chip, Paper, TextField } from "@mui/material";
+import { Autocomplete, Box, Button, Chip, Paper, TextField } from "@mui/material";
 import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
@@ -21,6 +21,8 @@ export function CreateMeeting() {
     const userAuth = useSelector(state => state.auth);
     const [ users, setUsers ] = useState([]);
     const [ attendeeList, setAttendeeList ] = useState([ userAuth.userData ]);
+    const [ meetingStartTime, setMeetingStartTime ] = useState(dayjs());
+    const [ meetingEndTime, setMeetingEndTime ] = useState(dayjs().add(1, "hour"));
 
     useEffect(() => {
         fetchUserData().then(userData => {
@@ -31,8 +33,37 @@ export function CreateMeeting() {
         });
     }, [ userAuth ]);
 
-    const handleSubmit = event => {
+    const handleSubmit = async event => {
+        event.preventDefault();
+        const data = new FormData(event.target);
 
+        try {
+            const response = await fetch('http://localhost:5209/meetings/new', {
+                method: 'POST',
+                body: JSON.stringify({
+                    'title': data.get('meeting-title'),
+                    'description': data.get('meeting-agenda'),
+                    'attendees': attendeeList,
+                    'startDate': meetingStartTime.format('MM/DD/YYYY hh:mm:ss A'),
+                    'endDate': meetingEndTime.format('MM/DD/YYYY hh:mm:ss A')
+                }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            const response_data = await response.json();
+
+            if(response_data.success) {
+                console.log('Successful');
+            }
+            else {
+                throw response_data.message;
+            }
+        }
+        catch(exception) {
+            console.log(exception);
+        }
     };
 
     return(
@@ -73,13 +104,17 @@ export function CreateMeeting() {
                     />
                     <DateTimePicker
                         label="Meeting Start Time"
-                        defaultValue={ dayjs() }
+                        id="start-time"
+                        defaultValue={ meetingStartTime }
                         sx={{ width: 1, mt: 2, mb: 1 }}
+                        onChange={ value => setMeetingStartTime(value) }
                     />
                     <DateTimePicker
                         label="Meeting End Time"
-                        defaultValue={dayjs().add(1, "hour")}
+                        id="end-time"
+                        defaultValue={ meetingEndTime }
                         sx={{ width: 1, mt: 2, mb: 1 }}
+                        onChange={ value => setMeetingEndTime(value) }
                     />
                     <Autocomplete
                         multiple
@@ -107,6 +142,12 @@ export function CreateMeeting() {
                             <TextField {...params} label="Meeting Attendees" />
                         )}
                     />
+                    <Button
+                        type="submit"
+                        sx={{ mt: 2, mb: 1, p: 2 }}
+                    >
+                        Create Meeting
+                    </Button>
                 </Box>
             </LocalizationProvider>
         </Paper>
