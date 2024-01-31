@@ -21,6 +21,7 @@ import { MainListItems } from "./MainListItems";
 import { SecondaryListItems } from "./SecodaryListItems";
 import { Users } from "../Users";
 import { Years } from "../Years";
+import { CreateMeeting } from "../CreateMeeting";
 
 const drawerWidth = 240;
 
@@ -162,6 +163,7 @@ export function Home() {
                         <Grid container>
                             { selectedView === 'Year' && <Years /> }
                             { selectedView === 'Users' && <Users /> }
+                            { selectedView === 'Create' && <CreateMeeting /> }
                         </Grid>
                     </Container>
                 </Box>
